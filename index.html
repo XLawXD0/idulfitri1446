@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramadan Kareem 2025</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Petemoss&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- CSS -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #45a049, #1b5e20, #2e7d32, #66bb6a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1b5e20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeOut 1s ease 2s forwards;
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            animation: pulse 1s infinite;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 1s ease forwards 2.5s;
+        }
+
+        #image-gif {
+            max-width: 200px;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+
+        #text {
+            color: white;
+            font-size: 1.5rem;
+            margin: 20px 0;
+            line-height: 1.6;
+            text-align: center;
+            min-height: 100px;
+        }
+
+        .play-music, .donate-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 12px 35px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+            margin: 10px;
+        }
+
+        .play-music:hover, .donate-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 0.8rem;
+        }
+
+        .footer a {
+            color: #66bb6a;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <!-- Main Code -->
+</head>
+<body>
+    <div class="loading-screen">
+        <div class="loading-text">Ramadan Kareem</div>
+    </div>
+
+    <audio id="linkmp3" src="https://i.supa.codes/i6xlo4" preload="auto"></audio>
+
+    <div class="container">
+        <div class="text-center">
+            <img src="https://c.tenor.com/W8JwWPQ2ExgAAAAj/assalamualaikum-breakfasting.gif" alt="" id="image-gif">
+        </div>
+        <div class="text-center">
+            <p id="text"></p>
+        </div>
+        <button class="play-music" onclick="playMusic()">Putar Musik</button>
+        <button class="donate-btn" onclick="showDonatePopup()">Kirim THR</button>
+    </div>
+
+    <footer class="footer">
+        <p>Script: 
+            <a href="" target="_blank">My Github</a>
+
+        </p>
+    </footer>
+
+    <!-- Script JS -->
+    <script>
+        // Ucapan teksnya disini
+        const texts = [
+            "Assalamualaikum Wr. Wb. ✨",
+            "Saya Erlan Rahmat Dwi Saputra ingin mengucapkan: 🌙",
+            "Selamat hari raya Idul Fitri 1446 H 🌟",
+            "Taqabbalallahu Minna Wa Minkum 🤲",
+            "Mohon Maaf Lahir dan Batin 🙏",
+            "Semoga Allah SWT Memberkahi Kita Semua 💫",
+            "Jangan lupa THR nya 💖",
+        ];
+
+        let currentText = 0;
+        const textElement = document.getElementById("text");
+        const audio = document.getElementById("linkmp3");
+
+        async function typeWriter(text, element) {
+            element.textContent = '';
+            const lines = text.split('\n');
+            
+            for(let line of lines) {
+                const lineDiv = document.createElement('div');
+                element.appendChild(lineDiv);
+                
+                for(let i = 0; i < line.length; i++) {
+                    lineDiv.textContent += line.charAt(i);
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                
+                if (lines.indexOf(line) < lines.length - 1) {
+                    element.appendChild(document.createElement('br'));
+                }
+            }
+        }
+
+        async function showTextsSequentially() {
+            for(let i = 0; i < texts.length; i++) {
+                await typeWriter(texts[i], textElement);
+                if(i < texts.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                }
+            }
+        }
+
+        function playMusic() {
+            audio.play().catch(error => console.error("Gagal memutar musik:", error));
+        }
+
+        // Ini buat teks button thr
+        function showDonatePopup() {
+            Swal.fire({
+                title: 'Mau kasih THR ? 🤲',
+                text: "Klik tombol di bawah untuk kasih THR.",
+                icon: 'info',
+                confirmButtonText: 'Kirim THR',
+                showCancelButton: true,
+                cancelButtonText: 'Nanti Saja'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.open('https://files.catbox.moe/cn1ota.jpg', '_blank'); // Ganti dengan link donasi kamu
+                }
+            });
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                showTextsSequentially();
+                playMusic();
+                setTimeout(showDonatePopup, 5000);
+            }, 3000);
+        });
+
+    </script>
+</body>
+</html>
