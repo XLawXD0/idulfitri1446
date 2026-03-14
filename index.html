@@ -1,240 +1,739 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ramadan Kareem 2026</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Petemoss&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>Idul Fitri 1447 H — Dirga Saputra</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- CSS -->
     <style>
+        :root {
+            --gold: #e8c96d;
+            --gold-light: #f5dfa0;
+            --gold-dark: #b89a3a;
+            --emerald: #1a4a2e;
+            --emerald-mid: #1f6340;
+            --emerald-light: #2d8a59;
+            --night: #050d0a;
+            --cream: #fdf6e3;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Quicksand', sans-serif;
         }
 
         body {
-            background: linear-gradient(-45deg, #45a049, #1b5e20, #2e7d32, #66bb6a);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: var(--night);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            font-family: 'Cormorant Garamond', serif;
+            cursor: default;
         }
 
+        /* ===== CANVAS STARS ===== */
+        #starCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ===== LANTERN PARTICLES ===== */
+        .lantern-wrap {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .lantern {
+            position: absolute;
+            bottom: -80px;
+            width: 18px;
+            height: 28px;
+            border-radius: 50% 50% 40% 40%;
+            animation: floatUp linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0%   { transform: translateY(0) translateX(0) scale(1);   opacity: 0; }
+            10%  { opacity: 0.8; }
+            50%  { transform: translateY(-55vh) translateX(20px) scale(1.05); opacity: 0.6; }
+            90%  { opacity: 0.2; }
+            100% { transform: translateY(-110vh) translateX(-15px) scale(0.8); opacity: 0; }
+        }
+
+        /* ===== LOADING SCREEN ===== */
         .loading-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #1b5e20;
+            inset: 0;
+            background: var(--night);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            animation: fadeOut 1s ease 2s forwards;
+            z-index: 2000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
         }
 
-        .loading-text {
-            color: white;
-            font-size: 2rem;
-            letter-spacing: 4px;
-            animation: pulse 1s infinite;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        .loading-screen.hide {
             opacity: 0;
-            transform: translateY(20px);
-            animation: slideUp 1s ease forwards 2.5s;
+            visibility: hidden;
+        }
+
+        .loading-moon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: inset -18px -4px 0 var(--gold);
+            animation: moonSpin 3s ease-in-out infinite alternate;
+            margin-bottom: 28px;
+        }
+
+        @keyframes moonSpin {
+            0%   { transform: rotate(-15deg) scale(1);    box-shadow: inset -18px -4px 0 var(--gold); }
+            100% { transform: rotate(15deg)  scale(1.08); box-shadow: inset -22px -6px 0 var(--gold-light); }
+        }
+
+        .loading-label {
+            font-family: 'Cinzel Decorative', serif;
+            color: var(--gold);
+            font-size: 1.1rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            animation: breathe 1.5s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.5; }
+            50%       { opacity: 1; }
+        }
+
+        .loading-bar-track {
+            margin-top: 22px;
+            width: 180px;
+            height: 2px;
+            background: rgba(232,201,109,0.15);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+            border-radius: 2px;
+            animation: loadFill 2s ease forwards;
+        }
+
+        @keyframes loadFill {
+            0%   { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* ===== BACKGROUND GRADIENT ===== */
+        .bg-gradient {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(31,99,64,0.35) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 30% at 80% 80%, rgba(26,74,46,0.2) 0%, transparent 60%),
+                var(--night);
+        }
+
+        /* ===== ORNAMENT TOP/BOTTOM ===== */
+        .ornament-top {
+            position: fixed;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 480px;
+            max-width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--gold-dark), var(--gold), var(--gold-dark), transparent);
+            z-index: 5;
+        }
+
+        .ornament-bottom {
+            position: fixed;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 480px;
+            max-width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--gold-dark), var(--gold), var(--gold-dark), transparent);
+            z-index: 5;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 520px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: revealCard 1s cubic-bezier(.22,1,.36,1) forwards 2.8s;
+        }
+
+        @keyframes revealCard {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== CARD ===== */
+        .card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(232,201,109,0.18);
+            border-radius: 28px;
+            padding: 3rem 2.5rem 2.5rem;
+            box-shadow:
+                0 0 0 1px rgba(232,201,109,0.06),
+                0 20px 60px rgba(0,0,0,0.6),
+                inset 0 1px 0 rgba(232,201,109,0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(232,201,109,0.08), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; left: -60px;
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(45,138,89,0.12), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* ===== CORNER DECORATIONS ===== */
+        .corner {
+            position: absolute;
+            width: 50px; height: 50px;
+            opacity: 0.5;
+        }
+        .corner-tl { top: 14px; left: 14px; border-top: 2px solid var(--gold); border-left: 2px solid var(--gold); border-radius: 8px 0 0 0; }
+        .corner-tr { top: 14px; right: 14px; border-top: 2px solid var(--gold); border-right: 2px solid var(--gold); border-radius: 0 8px 0 0; }
+        .corner-bl { bottom: 14px; left: 14px; border-bottom: 2px solid var(--gold); border-left: 2px solid var(--gold); border-radius: 0 0 0 8px; }
+        .corner-br { bottom: 14px; right: 14px; border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold); border-radius: 0 0 8px 0; }
+
+        /* ===== BISMILLAH ===== */
+        .bismillah {
+            font-family: 'Scheherazade New', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            margin-bottom: 1.2rem;
+            opacity: 0.9;
+            text-shadow: 0 0 20px rgba(232,201,109,0.3);
+        }
+
+        /* ===== DIVIDER ===== */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0.8rem 0 1.4rem;
+        }
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(232,201,109,0.4), transparent);
+        }
+        .divider-star {
+            color: var(--gold);
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        /* ===== GIF ===== */
+        .gif-wrap {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.4rem;
         }
 
         #image-gif {
-            max-width: 200px;
-            border-radius: 15px;
-            transition: transform 0.3s;
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid rgba(232,201,109,0.35);
+            box-shadow:
+                0 0 0 6px rgba(232,201,109,0.06),
+                0 0 30px rgba(232,201,109,0.15),
+                0 8px 30px rgba(0,0,0,0.5);
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 0 6px rgba(232,201,109,0.06), 0 0 30px rgba(232,201,109,0.15), 0 8px 30px rgba(0,0,0,0.5); }
+            50%       { box-shadow: 0 0 0 10px rgba(232,201,109,0.04), 0 0 50px rgba(232,201,109,0.25), 0 8px 30px rgba(0,0,0,0.5); }
+        }
+
+        .gif-ring {
+            position: absolute;
+            inset: -10px;
+            border-radius: 50%;
+            border: 1px solid rgba(232,201,109,0.15);
+            animation: ringExpand 3s ease-in-out infinite;
+        }
+
+        @keyframes ringExpand {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50%       { transform: scale(1.06); opacity: 0.1; }
+        }
+
+        /* ===== TEXT ===== */
+        .title-label {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 0.65rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0.6;
+            margin-bottom: 0.5rem;
         }
 
         #text {
-            color: white;
-            font-size: 1.5rem;
-            margin: 20px 0;
-            line-height: 1.6;
-            text-align: center;
-            min-height: 100px;
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--cream);
+            font-size: 1.45rem;
+            font-weight: 300;
+            line-height: 1.8;
+            min-height: 80px;
+            padding: 0 0.5rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            position: relative;
         }
 
-        .play-music, .donate-btn {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 12px 35px;
-            border-radius: 30px;
-            font-size: 1.1rem;
+        #text .highlight {
+            color: var(--gold-light);
+            font-style: italic;
+        }
+
+        /* cursor blink */
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: var(--gold);
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 0.7s steps(1) infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0; }
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-group {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            margin-top: 1.8rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
             cursor: pointer;
-            transition: all 0.3s;
-            backdrop-filter: blur(5px);
-            margin: 10px;
+            border: none;
+            border-radius: 100px;
+            padding: 13px 28px;
+            transition: all 0.3s cubic-bezier(.22,1,.36,1);
+            position: relative;
+            overflow: hidden;
+            outline: none;
         }
 
-        .play-music:hover, .donate-btn:hover {
-            background: rgba(255,255,255,0.3);
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0);
+            transition: background 0.2s;
+        }
+        .btn:hover::before { background: rgba(255,255,255,0.07); }
+
+        .btn-music {
+            background: transparent;
+            border: 1px solid rgba(232,201,109,0.45);
+            color: var(--gold-light);
+            box-shadow: 0 0 20px rgba(232,201,109,0.08), inset 0 1px 0 rgba(232,201,109,0.1);
+        }
+
+        .btn-music:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 30px rgba(232,201,109,0.2), 0 0 60px rgba(232,201,109,0.08);
             transform: translateY(-2px);
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        .btn-thr {
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-dark));
+            background-size: 200% 100%;
+            color: var(--night);
+            font-weight: 700;
+            box-shadow: 0 4px 20px rgba(232,201,109,0.3);
+            animation: shimmerBtn 3s linear infinite;
+        }
+
+        @keyframes shimmerBtn {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .btn-thr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(232,201,109,0.45);
         }
 
-        @keyframes fadeOut {
-            to { opacity: 0; visibility: hidden; }
+        .btn i {
+            margin-right: 7px;
+            font-size: 0.85rem;
         }
 
-        .footer {
+        /* ===== MUSIC NOTE ANIMATION ===== */
+        .note {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            text-align: center;
-            padding: 10px;
-            font-size: 0.8rem;
+            font-size: 1.4rem;
+            color: var(--gold);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 100;
+            animation: noteFloat 2s ease forwards;
+        }
+        @keyframes noteFloat {
+            0%   { opacity: 0; transform: translateY(0) rotate(-10deg) scale(0.8); }
+            20%  { opacity: 0.9; }
+            100% { opacity: 0; transform: translateY(-120px) rotate(20deg) scale(1.2); }
         }
 
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 1.6rem;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.25);
+            letter-spacing: 1px;
+        }
         .footer a {
-            color: #66bb6a;
+            color: rgba(232,201,109,0.45);
             text-decoration: none;
-            margin: 0 5px;
+            transition: color 0.2s;
+        }
+        .footer a:hover { color: var(--gold); }
+
+        /* ===== SWAL CUSTOM ===== */
+        .swal2-popup {
+            background: linear-gradient(145deg, #0d2018, #0a1a12) !important;
+            border: 1px solid rgba(232,201,109,0.3) !important;
+            border-radius: 20px !important;
+            font-family: 'Cormorant Garamond', serif !important;
+        }
+        .swal2-title { color: var(--gold) !important; font-family: 'Cinzel Decorative', serif !important; font-size: 1.3rem !important; }
+        .swal2-html-container { color: rgba(253,246,227,0.8) !important; font-size: 1.1rem !important; }
+        .swal2-confirm {
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold)) !important;
+            color: var(--night) !important;
+            border-radius: 100px !important;
+            font-family: 'Cinzel Decorative', serif !important;
+            font-size: 0.75rem !important;
+            letter-spacing: 1px !important;
+        }
+        .swal2-cancel {
+            background: transparent !important;
+            border: 1px solid rgba(232,201,109,0.3) !important;
+            color: var(--gold-light) !important;
+            border-radius: 100px !important;
+            font-family: 'Cinzel Decorative', serif !important;
+            font-size: 0.75rem !important;
+            letter-spacing: 1px !important;
         }
 
-        .footer a:hover {
-            text-decoration: underline;
-        }
+        /* ===== SCROLL indicator removed, no overflow ===== */
     </style>
-    <!-- Main Code -->
 </head>
 <body>
-    <div class="loading-screen">
-        <div class="loading-text">Ramadan Kareem</div>
-    </div>
 
-    <audio id="linkmp3" src="https://i.supa.codes/i6xlo4" preload="auto"></audio>
+<!-- Stars -->
+<canvas id="starCanvas"></canvas>
 
-    <div class="container">
-        <div class="text-center">
-            <img src="https://c.tenor.com/W8JwWPQ2ExgAAAAj/assalamualaikum-breakfasting.gif" alt="" id="image-gif">
+<!-- Gradient -->
+<div class="bg-gradient"></div>
+
+<!-- Lanterns -->
+<div class="lantern-wrap" id="lanternWrap"></div>
+
+<!-- Ornaments -->
+<div class="ornament-top"></div>
+<div class="ornament-bottom"></div>
+
+<!-- Loading -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-moon"></div>
+    <div class="loading-label">Memuat Ucapan</div>
+    <div class="loading-bar-track"><div class="loading-bar-fill"></div></div>
+</div>
+
+<!-- Audio -->
+<audio id="linkmp3" src="https://g.top4top.io/m_3725xws7h0.m4a" preload="auto"></audio>
+
+<!-- Main Card -->
+<div class="container">
+    <div class="card">
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+
+        <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-star">✦</span>
+            <span class="divider-star">🌙</span>
+            <span class="divider-star">✦</span>
+            <div class="divider-line"></div>
         </div>
-        <div class="text-center">
-            <p id="text"></p>
+
+        <div class="gif-wrap">
+            <div class="gif-ring"></div>
+            <img src="https://c.tenor.com/W8JwWPQ2ExgAAAAj/assalamualaikum-breakfasting.gif" alt="Idul Fitri" id="image-gif">
         </div>
-        <button class="play-music" onclick="playMusic()">Putar Musik</button>
-        <button class="donate-btn" onclick="showDonatePopup()">Kirim THR</button>
+
+        <div class="title-label">Ucapan Idul Fitri 1447 H</div>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-star">✦</span>
+            <div class="divider-line"></div>
+        </div>
+
+        <p id="text"></p>
+
+        <div class="btn-group">
+            <button class="btn btn-music" id="musicBtn" onclick="toggleMusic()">
+                <i class="fa fa-play" id="musicIcon"></i>Putar Musik
+            </button>
+            <button class="btn btn-thr" onclick="showDonatePopup()">
+                <i class="fa fa-heart"></i>Kirim THR
+            </button>
+        </div>
+
+        <div class="footer">
+            Dibuat dengan ❤️ oleh
+            <a href="#" target="_blank">Dirga Saputra</a>
+        </div>
     </div>
+</div>
 
-    <footer class="footer">
-        <p>Script: 
-            <a href="" target="_blank">My Github</a>
+<script>
+    /* ===== STARS ===== */
+    const canvas = document.getElementById('starCanvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
 
-        </p>
-    </footer>
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
 
-    <!-- Script JS -->
-    <script>
-        // Ucapan teksnya disini
-        const texts = [
-            "Assalamualaikum Wr. Wb. ✨",
-            "Saya Dirga Saputra ingin mengucapkan: 🌙",
-            "Selamat hari raya Idul Fitri 1447 H 🌟",
-            "Taqabbalallahu Minna Wa Minkum 🤲",
-            "Mohon Maaf Lahir dan Batin 🙏",
-            "Semoga Allah SWT Memberkahi Kita Semua 💫",
-            "Jangan lupa THR nya 💖",
-        ];
+    function initStars() {
+        resizeCanvas();
+        stars = Array.from({ length: 180 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.4 + 0.2,
+            alpha: Math.random(),
+            speed: Math.random() * 0.008 + 0.002,
+            dir: Math.random() > 0.5 ? 1 : -1
+        }));
+    }
 
-        let currentText = 0;
-        const textElement = document.getElementById("text");
-        const audio = document.getElementById("linkmp3");
-
-        async function typeWriter(text, element) {
-            element.textContent = '';
-            const lines = text.split('\n');
-            
-            for(let line of lines) {
-                const lineDiv = document.createElement('div');
-                element.appendChild(lineDiv);
-                
-                for(let i = 0; i < line.length; i++) {
-                    lineDiv.textContent += line.charAt(i);
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                }
-                
-                if (lines.indexOf(line) < lines.length - 1) {
-                    element.appendChild(document.createElement('br'));
-                }
-            }
-        }
-
-        async function showTextsSequentially() {
-            for(let i = 0; i < texts.length; i++) {
-                await typeWriter(texts[i], textElement);
-                if(i < texts.length - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                }
-            }
-        }
-
-        function playMusic() {
-            audio.play().catch(error => console.error("Gagal memutar musik:", error));
-        }
-
-        // Ini buat teks button thr
-        function showDonatePopup() {
-            Swal.fire({
-                title: 'Mau kasih THR ? 🤲',
-                text: "Klik tombol di bawah untuk kasih THR.",
-                icon: 'info',
-                confirmButtonText: 'Kirim THR',
-                showCancelButton: true,
-                cancelButtonText: 'Nanti Saja'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.open('https://telegra.ph/file/021c6f07b76e36189addc.jpg', '_blank'); // Ganti dengan link donasi kamu
-                }
-            });
-        }
-
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                showTextsSequentially();
-                playMusic();
-                setTimeout(showDonatePopup, 5000);
-            }, 3000);
+    function drawStars() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(s => {
+            s.alpha += s.speed * s.dir;
+            if (s.alpha >= 1 || s.alpha <= 0) s.dir *= -1;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(232, 201, 109, ${s.alpha * 0.7})`;
+            ctx.fill();
         });
+        requestAnimationFrame(drawStars);
+    }
 
-    </script>
+    window.addEventListener('resize', initStars);
+    initStars();
+    drawStars();
+
+    /* ===== LANTERNS ===== */
+    const lanternWrap = document.getElementById('lanternWrap');
+    const lanternColors = [
+        ['#e8c96d', '#b89a3a'],
+        ['#f5dfa0', '#c9a94e'],
+        ['#2d8a59', '#1a4a2e'],
+        ['#ff9d5c', '#c4611e'],
+    ];
+
+    function spawnLantern() {
+        const el = document.createElement('div');
+        el.classList.add('lantern');
+        const col = lanternColors[Math.floor(Math.random() * lanternColors.length)];
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.background = `radial-gradient(ellipse at 40% 30%, ${col[0]}, ${col[1]})`;
+        el.style.boxShadow = `0 0 12px 4px ${col[0]}55`;
+        const dur = 8 + Math.random() * 6;
+        el.style.animationDuration = dur + 's';
+        el.style.animationDelay = Math.random() * -dur + 's';
+        lanternWrap.appendChild(el);
+        setTimeout(() => el.remove(), dur * 1000 + 500);
+    }
+
+    setInterval(spawnLantern, 900);
+    for (let i = 0; i < 8; i++) spawnLantern();
+
+    /* ===== LOADING ===== */
+    const loadingScreen = document.getElementById('loadingScreen');
+    setTimeout(() => loadingScreen.classList.add('hide'), 2400);
+
+    /* ===== TYPEWRITER ===== */
+    const texts = [
+        "Assalamualaikum Wr. Wb. ✨",
+        "Saya Dirga Saputra ingin mengucapkan:",
+        "🌙 Selamat Hari Raya Idul Fitri 1447 H 🌙",
+        "Taqabbalallahu Minna Wa Minkum 🤲",
+        "Mohon Maaf Lahir & Batin 🙏",
+        "Semoga Allah SWT senantiasa memberkahi kita semua 💫",
+        "Jangan lupa THR-nya ya~ 💛",
+    ];
+
+    let currentTextIdx = 0;
+    const textEl = document.getElementById('text');
+    let cursorEl = null;
+    let isTyping = false;
+
+    function createCursor() {
+        if (cursorEl) cursorEl.remove();
+        cursorEl = document.createElement('span');
+        cursorEl.classList.add('cursor');
+        return cursorEl;
+    }
+
+    async function typeWriter(text, element) {
+        element.innerHTML = '';
+        const cursor = createCursor();
+
+        const span = document.createElement('span');
+        element.appendChild(span);
+        element.appendChild(cursor);
+
+        for (let i = 0; i < text.length; i++) {
+            span.textContent += text.charAt(i);
+            await new Promise(r => setTimeout(r, 65));
+        }
+    }
+
+    async function showTexts() {
+        await new Promise(r => setTimeout(r, 3200));
+        for (let i = 0; i < texts.length; i++) {
+            await typeWriter(texts[i], textEl);
+            await new Promise(r => setTimeout(r, 2200));
+        }
+        // loop
+        showTexts();
+    }
+
+    /* ===== MUSIC ===== */
+    const audio = document.getElementById('linkmp3');
+    let musicPlaying = false;
+    const musicBtn = document.getElementById('musicBtn');
+    const musicIcon = document.getElementById('musicIcon');
+
+    function toggleMusic() {
+        if (musicPlaying) {
+            audio.pause();
+            musicIcon.className = 'fa fa-play';
+            musicBtn.querySelector('span') && (musicBtn.querySelector('span').textContent = 'Putar Musik');
+            musicPlaying = false;
+        } else {
+            audio.play().catch(e => console.error(e));
+            musicIcon.className = 'fa fa-pause';
+            musicPlaying = true;
+            spawnNotes();
+        }
+    }
+
+    function spawnNotes() {
+        if (!musicPlaying) return;
+        const notes = ['♩','♪','♫','♬'];
+        const note = document.createElement('div');
+        note.classList.add('note');
+        note.textContent = notes[Math.floor(Math.random() * notes.length)];
+        const rect = musicBtn.getBoundingClientRect();
+        note.style.left = (rect.left + Math.random() * rect.width) + 'px';
+        note.style.top = rect.top + 'px';
+        note.style.fontSize = (1 + Math.random()) + 'rem';
+        document.body.appendChild(note);
+        setTimeout(() => note.remove(), 2000);
+        setTimeout(spawnNotes, 600);
+    }
+
+    /* ===== THR POPUP ===== */
+    function showDonatePopup() {
+        Swal.fire({
+            title: '🤲 Kirim THR',
+            html: `<p style="font-size:1.1rem;line-height:1.7">Ingin berbagi kebahagiaan di Hari Raya ini?<br>Klik tombol di bawah untuk mengirim THR.</p>`,
+            showCancelButton: true,
+            confirmButtonText: '💛 Kirim Sekarang',
+            cancelButtonText: 'Nanti Aja',
+            customClass: {
+                popup: 'swal-custom',
+            }
+        }).then(result => {
+            if (result.isConfirmed) {
+                window.open('https://telegra.ph/file/021c6f07b76e36189addc.jpg', '_blank');
+            }
+        });
+    }
+
+    /* ===== INIT ===== */
+    window.addEventListener('load', () => {
+        showTexts();
+        setTimeout(() => {
+            audio.play().then(() => {
+                musicPlaying = true;
+                musicIcon.className = 'fa fa-pause';
+                spawnNotes();
+            }).catch(() => {});
+            setTimeout(showDonatePopup, 6000);
+        }, 3000);
+    });
+</script>
 </body>
 </html>
