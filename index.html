@@ -526,7 +526,7 @@
             <img src="https://c.tenor.com/W8JwWPQ2ExgAAAAj/assalamualaikum-breakfasting.gif" alt="Idul Fitri" id="image-gif">
         </div>
 
-        <div class="title-label">Ucapan Idul Fitri 1447 H</div>
+        <div class="title-label">Selamat Hari Raya Idul Fitri 1447 H</div>
 
         <div class="divider">
             <div class="divider-line"></div>
@@ -707,17 +707,30 @@
     /* ===== THR POPUP ===== */
     function showDonatePopup() {
         Swal.fire({
-            title: '🤲 Kirim THR',
-            html: `<p style="font-size:1.1rem;line-height:1.7">Ingin berbagi kebahagiaan di Hari Raya ini?<br>Klik tombol di bawah untuk mengirim THR.</p>`,
+            title: '🤲 Mau Kasih THR?',
+            html: `<p style="font-size:1.1rem;line-height:1.7">Ingin berbagi kebahagiaan di Hari Raya ini?<br>Klik tombol di bawah untuk melihat QRIS.</p>`,
             showCancelButton: true,
-            confirmButtonText: '💛 Kirim Sekarang',
+            confirmButtonText: '💛 Kirim THR',
             cancelButtonText: 'Nanti Aja',
-            customClass: {
-                popup: 'swal-custom',
-            }
         }).then(result => {
             if (result.isConfirmed) {
-                window.open('https://telegra.ph/file/021c6f07b76e36189addc.jpg', '_blank');
+                Swal.fire({
+                    title: '💛 Scan QRIS',
+                    html: `
+                        <p style="font-size:0.95rem;line-height:1.7;margin-bottom:14px;color:rgba(253,246,227,0.75)">
+                            Terima kasih! Scan QRIS di bawah 🙏
+                        </p>
+                        <div style="background:white;border-radius:16px;padding:12px;display:inline-block;box-shadow:0 0 30px rgba(232,201,109,0.25);border:2px solid rgba(232,201,109,0.4);">
+                            <img src="https://a.top4top.io/p_3725ryok90.png" alt="QRIS THR"
+                                style="width:220px;height:220px;object-fit:contain;display:block;border-radius:8px;"
+                                onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+                            <p style="display:none;color:#888;font-size:0.85rem;padding:10px;">Gagal memuat gambar QRIS</p>
+                        </div>
+                    `,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    width: 360,
+                });
             }
         });
     }
